@@ -1,0 +1,343 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <link th:href="@{/css/index.css}" rel="stylesheet">
+<!--    <link th:href="@{/css/custom.css}" rel="stylesheet">-->
+<!--    <link th:href="@{/css/style.css}" rel="stylesheet">-->
+    <head th:replace="fragments/head :: headFragment"></head>
+    <link th:href="@{/css/main.css}" rel="stylesheet">
+    <link th:href="@{/css/side.css}" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/yearpicker.css}"/>
+    <script th:inline="javaScript" th:src="@{js/yearpicker.js}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
+    <script th:src="@{js/jszip.js}"></script>
+    <script th:src="@{js/jszip.min.js}"></script>
+
+    <script th:inline="javaScript" th:src="@{js/auth.js}"></script>
+    <script th:inline="javaScript" th:src="@{js/index.js}"></script>
+    <script th:inline="javaScript" th:src="@{js/main.js}"></script>
+    <style>
+
+    #ajax_indicator {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        height: 200px;
+        margin-top: -75px;
+        margin-left: -75px;
+        z-index: 999999;
+    }
+    #title {
+        margin-left: 10px;
+    }
+
+    .ui-datepicker-calender {
+        display : none;
+    }
+    .ui-jqgrid .ui-jqgrid-bdiv {
+         position: relative;
+         margin: 0;
+         padding:0;
+         text-align:left;
+         overflow-x: hidden;
+         font-size:13px;
+         table-layout : auto;
+         width:100%;
+    }
+
+
+    .ui-jqgrid-hbox { height:1px; }
+
+
+    .input-div{
+       vertical-align: middle;
+    }
+    #act_cont {
+
+        font-size:16px;
+    }
+    #table {
+        font-size:13px;
+    }
+    #detail_table {
+        font-size:13px;
+    }
+
+
+
+
+    </style>
+    <div style="height:60px;" >
+        <div style="height:10px;"></div>
+            <a th:href="@{/index}" style="margin:0px 0px 0px 25px;"><img class="mt-1" src="/img/logo.png" width="150px"></a>
+        <div id="user_dept_code" class="text-dark mt-1 text-center" th:text="${session.dto.proj_code}" hidden></div>
+        <div id="user_dept_name" class="text-dark mt-1 text-center" th:text="${session.dto.dept_name}" hidden></div>
+        <div id="user_no" class="text-dark mt-1 text-center" th:text="${session.dto.adm_ck}" hidden></div>
+        <div class="dropdown" style="border:1px; ">
+            <img class="mt-1" src="/img/user4.png" width="30px" style="margin:0px 0px 0px 25px;">
+
+            <div class="dropdown-options" style="float:left;">
+                <h3 class="text-dark mt-1 text-center" th:text="${session.dto.dept_name}+' / '+${session.dto.user_nm}"></h3>
+                <a style="text-align:center; font-size=15px;" onclick="logout();">로그아웃</a>
+            </div>
+        </div>
+
+
+        <input id="send_yyyy" hidden/>
+        <input id="send_seq" hidden/>
+        <input id="send_act_seq" hidden/>
+    </div>
+    <body>
+        <div style="border:0px solid rgba(0, 0, 0, .1); border-width:1px 0px 0px 0px;">
+            <div style="height:10px;"></div>
+            <div id="ajax_indicator" style="display:none;"><img src="img/loading1.gif"  style="width:50px;" /></div>
+            <div style="float:right; margin:0px 40px 0px 0px;">
+                <button class="btn btn-success btn-sm mb-2" onclick="search();">조회</button>
+                <button class="btn btn-info btn-sm mb-2" onclick="add();">추가</button>
+                <button class="btn btn-danger btn-sm mb-2 delBtn" onclick="del_list();">삭제</button>
+<!--                <button class="btn btn-info btn-sm mb-2" id="export" >엑셀변환</button>-->
+<!--                <button class="btn btn-primary btn-sm mb-2" onclick="mod_list();">수정</button>-->
+            </div>
+            <div class="col-sm-12" style="margin: 0px 0px 0px 30px;">
+
+                <label for="yyyy_t" class="form-label">ㆍ조회년도</label>
+                &nbsp;
+
+
+                <input type="text" class="options1 yearpicker" id="yyyy_f" onchange="search();" />
+
+                     <span> ~ </span>
+                <input type="text" class="options1 yearpicker2" id="yyyy_t" onchange="search();" />
+                <label for="dept_code">ㆍ부서</label>
+                &nbsp;&nbsp;
+                <select id="dept_code" class="form-control" style="width:170px;" onchange="search();">
+                    <option value="">전체</option>
+                    <option th:each="list : ${dept_list}" th:text="${list.NAME}" th:value="${list.CODE}"></option>
+                </select>
+                &nbsp;
+
+                <label for="area_code">ㆍ지역</label>
+                &nbsp;    &nbsp;
+
+
+                <select id="area_code" class="form-control" style="width:170px;" onchange="search();">
+                    <option value="">전체</option>
+                    <option th:each="list : ${area_list}" th:text="${list.NAME}" th:value="${list.CODE}"></option>
+                </select>
+                &nbsp;
+                <label for="act_state">ㆍ상태</label>
+                &nbsp;&nbsp;
+                <select id="act_state" class="form-control" style="width:170px;" onchange="search();">
+                    <option value="">전체</option>
+                    <option th:each="list : ${act_state_list}" th:text="${list.NAME}" th:value="${list.CODE}"></option>
+                </select>
+             </div>
+            <div style="height:10px;"></div>
+        </div>
+        <div style="margin:0px 0px 0px 25px;">
+            <h4 style="color:#2E86C1;">ㆍ수주활동 기본정보</h4>
+            <div style="padding : 0px 0px 0px 30px;">수주회의 용으로 활용됩니다.[ ☞ 실적: 수주년월이 회의 개최 전월까지로 된 건중 낙찰로 분류된 건 &nbsp; ☞ 예상:수주년월이 회의개최월로 표시된 건 &nbsp; ☞ 협의대상: 예상 중 협의대상으로 분류 되어 있는 건 ]</div>
+
+        </div>
+        <div class="col-12" style="margin:0px 25px 0px; position:relative;" id="table_main">
+                <table id="table" class="table_main" onkeydown="move(event);"></table>
+        </div>
+        <div style="height:30px;"></div>
+        <div class="col-12">
+            <div>
+                <div style="float:left; width:27.5%; margin:0px 0px 0px 25px;">
+                    <h4 style="color:#2E86C1;">ㆍ수주활동내역</h4>
+                    <table id="detail_table" class="table text-nowrap table-striped" onkeydown="move_dtl(event);"></table>
+                </div>
+
+                <div style="float:left; width:7%;">
+                    <button class="btn btn-info btn-sm mb-3" onclick="add_dtl();">추가</button>
+                    <button class="btn btn-danger btn-sm mb-3 delBtn" onclick="del_dt_list();">삭제</button>
+                </div>
+                <div style="float:left; width:30%; margin:0px 25px 0px 0px;">
+                    <h4 style="color:#2E86C1;">ㆍ활동내역</h4>
+                    <textarea id="act_cont" style="background-color: #F2F473;" readonly></textarea>
+<!--                    <textarea id="act_cont" cols="150" rows="14" readonly style="background-color: #F2F473;"></textarea>-->
+<!--                    <textarea data-autoresize rows="14" id="act_cont" style="background-color: #F2F473;" readonly></textarea>-->
+                </div>
+<!--                <div style="float:right; width:33%;">-->
+<!--                    <textarea id="act_cont" cols="173" rows="14" readonly style="background-color: #F2F473;"></textarea>-->
+<!--                </div>-->
+<!--                <div style="float:left; width:53%;">-->
+<!--                    <h4 style="color:#2E86C1;">ㆍ수주활동내역</h4>-->
+<!--                    <table id="detail_table" class="table text-nowrap table-striped"></table>-->
+<!--                </div>-->
+<!--                <div style="float:left; width:47%;">-->
+<!--                    <button class="btn btn-info btn-sm mb-3" onclick="add_dtl();">추가</button>-->
+<!--                    <button class="btn btn-danger btn-sm mb-3 delBtn" onclick="del_dt_list();">삭제</button>-->
+<!--                    <h4 style="color:#2E86C1;">ㆍ활동내역</h4>-->
+<!--                </div>-->
+<!--                <div style="float:right; width:33%;">-->
+<!--                    <textarea id="act_cont" cols="173" rows="14" readonly style="background-color: #F2F473;"></textarea>-->
+<!--                </div>-->
+            </div>
+<!--            <div class="col-4">-->
+
+
+<!--            </div>-->
+        </div>
+
+<!--        <div class="col-12">-->
+<!--            <div class="col-5">-->
+
+<!--            </div>-->
+<!--            <div class="col-3">-->
+<!--                <textarea id="act_cont" cols="179" rows="14" readonly style="background-color: #F2F473;"></textarea>-->
+<!--            </div>-->
+
+<!--        </div>-->
+
+
+<script th:inline="javaScript">
+
+
+        /*<![CDATA[*/
+        let data = /*[[ ${board_list} ]]*/;
+        let jsData = /*[[ ${list} ]]*/;
+        let data2 = /*[[ ${search_list} ]]*/;
+        /*]]*/
+
+
+
+
+
+</script>
+
+<script th:inline="javaScript">
+
+$(function() {
+
+var $grid =  $("#table"),
+               newWidth = $grid.closest(".ui-jqgrid").parent().width()-50;
+               newHeight = $grid.closest(".ui-jqgrid").parent().height();
+           $grid.jqGrid("setGridWidth", newWidth, true);
+
+
+
+
+    var $grid =  $("#detail_table"),
+        newWidth2 = $grid.closest(".ui-jqgrid").parent().width()+98;
+    $grid.jqGrid("setGridWidth", newWidth2, true);
+
+
+    var now = new Date();
+    var year = now.getFullYear();
+    document.getElementById("yyyy_t").value = year;
+    document.getElementById("yyyy_f").value = 2010;
+
+    $(".yearpicker").yearpicker({
+
+        year:2010,
+        startYear:2010,
+        endYear: 2050,
+    });
+
+    $(".yearpicker2").yearpicker({
+
+        year:2023,
+        startYear:2010,
+        endYear: 2050,
+    });
+
+    $("#dept_code").select2();
+    $("#area_code").select2();
+    $("#act_state").select2();
+<!--    $("#table").parents('div.ui-jqgrid-bdiv').css("max-height","300px");-->
+    $("#detail_table").parents('div.ui-jqgrid-bdiv').css("min-width","600px");
+
+
+
+            newHeight2 = $("#detail_table").closest(".ui-jqgrid").parent().height()-30;
+            newHeight4 = $("#detail_table").closest(".ui-jqgrid").parent().height();
+            $('#act_cont').css('height',newHeight2);
+            newWidth3 = $(window).width() - 680;
+            newWidth5 = $(window).width() - 725;
+
+
+<!--            alert($(window).width());-->
+           if ($(window).width() < 1552) {
+              $('#act_cont').css('width', newWidth3+75);
+
+           }
+           if ($(window).width() > 1552 && $(window).width() < 1708) {
+              $('#act_cont').css('width', newWidth3+60);
+<!--              $("#table").setGridWidth($(this).width() *.832);-->
+           }
+           if ($(window).width() > 1708 && $(window).width() < 1808) {
+              $('#act_cont').css('width', newWidth3+15);
+<!--              $("#table").setGridWidth($(this).width() *.955);-->
+           }
+           if ($(window).width() >= 1809 && $(window).width() < 1849) {
+              $('#act_cont').css('width', newWidth3);
+<!--              $("#table").setGridWidth($(this).width() *.947);-->
+           }
+           if ($(window).width() > 1850 && $(window).width() < 1919) {
+              $('#act_cont').css('width', newWidth5+15);
+
+           }
+           if ($(window).width() >= 1920) {
+              $('#act_cont').css('width', newWidth5);
+<!--              $("#table").setGridWidth($(this).width() *.952);-->
+           }
+
+
+<!--    $("#export").on("click", function(){-->
+
+<!--        var list = $("#table").jqGrid("getRowData");-->
+
+<!--        list = JSON.stringify(list);-->
+
+
+<!--        $.ajax({-->
+<!--            url:"/downloadExcel",-->
+<!--            data:{"list":list},-->
+<!--            dataType:"json",-->
+<!--            method:'post',-->
+<!--            traditional: true,-->
+<!--            beforeSend:function() {-->
+<!--            }-->
+<!--            ,success:function(data) {-->
+
+
+<!--            }-->
+
+<!--        })-->
+
+<!--        location.href="/downloadExcel";-->
+
+
+
+
+<!--	   $("#table").table2excel({exclude:".excludeThisClass",name:"수주종합정보",-->
+<!--           filename:"수주종합정보",-->
+<!--           exclude: ".excludeThisClass",-->
+<!--           fileext:".xls",-->
+<!--           exclude_inputs:false,-->
+<!--           preserveColors: false-->
+<!--	   });-->
+<!--	   -->
+<!--	})-->
+
+
+
+})
+
+</script>
+
+
+
+
+</body>
+
+</html>

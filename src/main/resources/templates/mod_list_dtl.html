@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="fragments/head :: headFragment"></head>
+
+<link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link th:href="@{/css/side.css}" rel="stylesheet">
+
+
+<link th:href="@{/css/main.css}" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/translations/ko.js"></script>
+
+
+
+<style>
+        #priveiwImg{
+            width: 80px;
+            height: 80px;
+        }
+        #upload_message{
+            font-size:30px;
+            font-weight:bolder;
+        }
+        h6{
+            font-size:18px;
+            font-weight:bolder;
+        }
+        body{
+
+        float : left;
+        }
+        .ck-editor__editable {
+          height: 300px;
+        }
+        .ck-content {
+          font-size: 12px;
+        }
+        .ck-editor__editable p {margin: 0}
+
+        .select2-selection__rendered {
+            line-height: 31px !important;
+        }
+        .select2-container .select2-selection--single {
+            height: 35px !important;
+        }
+        .select2-selection__arrow {
+            height: 34px !important;
+        }
+    </style>
+<body>
+<input id="select_mode" type="text" th:value="${info.select_mode}" hidden/>
+<input id="test" th:value="${session.dto.user_no}" hidden>
+<input id="test2" th:value="${info?.user_no}" hidden>
+<div class="col-12" style="margin: 0px 0px 0px 0px; text-align:center; height:70px; border:1px solid rgba(0, 0, 0, .1); border-width: 0px 0px 1px 0px;">
+    <div style="height:20px;"></div>
+    <h2 class="mb-3 fw-bold">활동내역</h2>
+
+</div>
+<div style="text-align:right; margin:0px 15px 0px 0px;">
+    <button id="update_dtl_btn" class="btn btn-success modBtn" onclick="update_dtl();" th:if="(${session.dto.user_no} == ${info.user_no})">수정</button>
+    <button id="mod_dtl" style="width:10%;" class="btn btn-success" onclick="mod_dtl();">저장</button>
+</div>
+<div class="main_div  container-fluid" id="main_div" style="background-color:#F3F3F3;">
+    <div class="row g-0" >
+        <div class=" col-lg-12" style="margin-top:20px;">
+
+
+
+            <div class="row g-3 needs-validation">
+
+                <input type="text" class="form-control" id="send_yyyy" hidden/>
+                <input type="text" class="form-control" id="send_seq" hidden/>
+                <input type="text" class="form-control" id="send_act_seq" hidden/>
+
+
+                <div class="col-sm-3">
+                    <label for="act_dt" class="form-label">활동일자</label>
+                    <input type="date" class="form-control" id="act_dt" th:value="${info?.act_dt}">
+
+                </div>
+                <div class="col-sm-3">
+                    <label for="prog_lvl" class="form-label">진행단계</label>
+                    <select id="prog_lvl" th:value="${info?.prog_lvl}" class="form-select" style="width:100%">
+                        <option th:selected="${info?.prog_lvl}=='1'" value="1">공고전</option>
+                        <option th:selected="${info?.prog_lvl}=='2'" value="2">기본설계</option>
+                        <option th:selected="${info?.prog_lvl}=='3'" value="3">실시설계</option>
+                        <option th:selected="${info?.prog_lvl}=='4'" value="4">원도급 입찰 중</option>
+                        <option th:selected="${info?.prog_lvl}=='5'" value="5">원도급 선정</option>
+                        <option th:selected="${info?.prog_lvl}=='6'" value="6">하도급 입찰 중</option>
+                        <option th:selected="${info?.prog_lvl}=='7'" value="7">낙찰</option>
+                        <option th:selected="${info?.prog_lvl}=='8'" value="8">탈락</option>
+                        <option th:selected="${info?.prog_lvl}=='9'" value="9">보류</option>
+                        <option th:selected="${info?.prog_lvl}=='10'" value="10">예상</option>
+                        <option th:selected="${info?.prog_lvl}=='11'" value="11">기타</option>
+                    </select>
+                </div>
+                <div></div>
+                <div class="col-sm-3">
+                    <label for="bid_ex_dt" class="form-label">당사입찰예정(월)</label>
+                    <input id="bid_ex_dt" type="month" class="form-control" th:value="${info?.bid_ex_dt}">
+                </div>
+                <div class="col-sm-3">
+                    <label for="suju_state" class="form-label">수주가능성</label>
+                    <select id="suju_state" th:value="${info?.suju_state}" class="form-select" style="width:100%">
+                        <option th:selected="${info?.suju_state}=='1'" value="1">상</option>
+                        <option th:selected="${info?.suju_state}=='2'" value="2">중</option>
+                        <option th:selected="${info?.suju_state}=='3'" value="3">하</option>
+                    </select>
+                </div>
+                <div></div>
+                <div class="col-sm-12">
+                    <label for="act_cont" class="form-label">활동내역(비고)</label>
+                    <textarea id="act_cont" type="text" class="form-control" style="width:680px; height:430px;" th:text="${info?.act_cont}"></textarea>
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
+
+
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/index.js}"></script>
+
+<script>
+   $(function() {
+
+
+    document.getElementById("send_yyyy").value = window.opener.document.getElementById("send_yyyy").value;
+    document.getElementById("send_seq").value = window.opener.document.getElementById("send_seq").value;
+    document.getElementById("send_act_seq").value = window.opener.document.getElementById("send_act_seq").value;
+
+    $("#prog_lvl").select2();
+    $("#suju_state").select2();
+
+
+    var select_mode = $("#select_mode").val();
+
+    if(select_mode == 'add') {
+
+        const today = new Date();
+
+        const yesterday = new Date(today);
+
+        yesterday.setDate(today.getDate() - 1);
+        document.getElementById("act_dt").valueAsDate = yesterday;
+
+        ClassicEditor.create( document.querySelector( '#act_cont' ), {
+          language: "ko"
+
+        })
+        .then( newEditor => {
+          editor = newEditor;
+
+        })
+        .catch( error => {
+          console.error( error );
+        });
+    } else {
+
+       $("#act_dt").attr("disabled",true);
+       $("#bid_ex_dt").attr("disabled",true);
+
+       $("#prog_lvl").select2({ disabled: true });
+       $("#suju_state").select2({ disabled: true });
+
+       $("#mod_dtl").hide();
+
+       ClassicEditor.create( document.querySelector( '#act_cont' ), {
+       language: "ko"
+
+       })
+       .then( newEditor => {
+         editor = newEditor;
+         editor.enableReadOnlyMode("editor");
+       })
+       .catch( error => {
+         console.error( error );
+       });
+
+    }
+
+
+    })
+</script>
+
+
+
+
+
+
+
+</body>
+</html>

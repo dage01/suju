@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="fragments/head :: headFragment"></head>
+<link th:href="@{/css/index.css}" rel="stylesheet">
+<script th:src="@{/js/login.js}"></script>
+<script>
+if(/MSIE\D|Trident.*.rv:/.test(navigator.userAgent)){
+
+    setTimeout(function(){
+        location.href="/ie";
+    },1);
+}
+
+</script>
+<style>
+    .container{
+        position:absolute;
+        top:50%;
+        bottom:50%;
+
+    }
+
+
+
+</style>
+<body>
+<div class="container" style="text-align:center;" id="warp">
+    <div style="position:absolute; left:560px; top:80px;">
+        <img class="mt-1" th:src="@{/img/logo.png}" src="/img/logo.png" width="200px"><br>
+    </div>
+    <div style="display:inline-block; position:absolute; left:560px; top:150px;" >
+
+
+        <form>
+            <table id="mainT" >
+                <tr>
+                    <td class="main_user">
+                        <input class="form-control" id="user_id" name="user_id" type="text" placeholder="아이디">
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="main_user2">
+                        <input class="form-control" id="user_pwd" name="user_pwd" type="password" autocomplete="false" placeholder="비밀번호">
+                    </td>
+                </tr>
+
+<!--                <tr>-->
+<!--                    <td>-->
+<!--                        <input class="col-12" id="user_pwd" name="user_pwd" type="password" autocomplete="false" placeholder="비밀번호">-->
+<!--                    </td>-->
+<!--                </tr>-->
+                <tr>
+                    <td class="main_user_btn">
+                        <button type="button"  id="loginBtn" onclick="confirm();"  class="col-12 btn btn-success ">로그인</button>
+                    </td>
+                </tr>
+
+            </table>
+        </form>
+
+    </div>
+
+
+
+</div>
+
+</body>
+</html>

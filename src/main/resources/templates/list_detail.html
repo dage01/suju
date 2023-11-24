@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:replace="fragments/head :: headFragment"></head>
+<link th:href="@{/css/main.css}" rel="stylesheet">
+<link th:href="@{/css/side.css}" rel="stylesheet">
+
+
+<!--<script th:inline="javaScript" th:src="@{js/auth.js}"></script>-->
+<script th:inline="javaScript" th:src="@{js/detail.js}"></script>
+<style>
+
+</style>
+<body>
+<div class="col-12">
+    <h4>ㆍ수주활동내역</h4>
+    <div class="col-6">
+        <table id="detail_table" class="table text-nowrap table-striped"></table>
+
+    </div>
+    <div id="jqGridPager_sub"></div>
+
+
+
+</div>
+
+<script th:inline="javaScript">
+
+/*<![CDATA[*/
+
+  let data = /*[[ ${list_detail} ]]*/
+
+/*]]*/
+
+$(function(){
+
+
+ $("#detail_table").jqGrid({
+                    colNames: [
+                        "","년도","번호","활동번호","활동일자","진행단계","당사입찰예정(월)","수주가능성","작성자"
+                    ],
+                    colModel: [
+                        {
+                            index: 'YYYY',
+                            name: 'YYYY',
+                            width: 1,
+                            align:"center",
+                            key:true
+                        },
+                        {
+                            index: 'SEQ',
+                            name: 'SEQ',
+                            width: 1,
+                            align:"center",
+                            key:true
+                        },
+                        {
+                            index: 'ACT_SEQ',
+                            name: 'ACT_SEQ',
+                            width: 1,
+                            align:"center",
+                            key:true
+                        },
+                        {
+                            index: 'R_NUM',
+                            name: 'R_NUM',
+                            width: 1,
+                            align:"center"
+                        },
+
+                        {
+                            index: 'ACT_DT',
+                            name: 'ACT_DT',
+                            width: 1,
+                            align:"center"
+                        },
+                        {
+                            index: 'PROG_LVL',
+                            name: 'PROG_LVL',
+                            width: 1,
+                            align:"center"
+                        },
+                        {
+                            index: 'BID_EX_DT',
+                            name: 'BID_EX_DT',
+                            width: 1,
+                            align:"center"
+                        },
+                        {
+                            index: 'SUJU_STATE',
+                            name: 'SUJU_STATE',
+                            width: 1,
+                            align:"center"
+                        },
+                        {
+                            index: 'WRITER',
+                            name: 'WRITER',
+                            width: 1,
+                            align:"center"
+                        }
+                    ],
+                    viewrecords: false // show the current page, data rang and total records on the toolbar
+                    ,shrinkToFit: true
+                    ,rowNum: 16
+                    ,loadonce: false
+                    ,datatype: "json"
+                    ,autowidth: false //auto 넓이
+                    ,data: data
+                    ,jsonReader: { root : "list_detail" }
+                    ,width: 500
+                    ,height: "39vh" //높이
+                    ,pager: "#jqGridPager_sub" //페이징
+                    ,sortable: false // 마우스로 행 옮기기
+                    ,loadtext: "로딩중입니다..."
+                    ,caption: ""
+                    ,searchoptions: {
+                        sopt: ['eq', 'bw', 'bn', 'cn', 'nc', 'ew', 'en']
+                    }
+                    ,rownumbers : false
+                    ,rownumWidth : 50
+                    ,rowList : [10,20,30,40,50,60,70,80,90,100]
+
+
+
+
+                    ,onCellSelect: function(id, status, e) //행 클릭 function
+                    {
+
+
+
+                    },
+                    loadError: function(xhr, status, error) // 불러오기 실패했을 경우 발생하는 이벤트
+                    {
+                        //xhr : XMLHttpRequest object , status : type of error , error : exception object
+                        //alert("오류가 발생 하였습니다.\n 전산팀에 문의하세요.");
+                    }
+        });
+
+})
+
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:replace="fragments/head :: headFragment">
+    <br>
+
+</head>
+
+<link th:href="@{/css/side.css}" rel="stylesheet">
+<link th:href="@{/css/main.css}" rel="stylesheet">
+<script th:inline="javaScript" th:src="@{js/auth.js}"></script>
+<script th:inline="javaScript" th:src="@{js/menu.js}">
+
+</script>
+
+    <body>
+
+
+
+        <div class="row g-0 h-100" >
+            <div class="col col-md-2 ">
+                <div class th:replace="fragments/menu :: menuFragment"></div>
+
+            </div>
+
+
+
+
+            <div class="col col-md-10 mh-100" id="main_div">
+                <table id="jqgrid_table" class="table   text-nowrap  table-striped"></table>
+                <div  id="jqGridPager"></div>
+            </div>
+
+
+        </div>
+
+
+
+    <script th:inline="javaScript">
+
+
+      /*<![CDATA[*/
+        let data = /*[[ ${board_list} ]]*/;
+
+      /*]]*/
+
+
+
+    </script>
+
+
+    </body>
+
+</html>

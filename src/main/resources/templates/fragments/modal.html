@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<style>
+
+</style>
+<link th:href="@{/css/select2.css}" rel="stylesheet">
+<script th:src="@{/js/select2.js}"></script>
+
+
+<div th:fragment="modalFragment">
+  <!-- Modal -->
+  <!--        <div class="modal  fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">-->
+  <div class="modal  fade" id="staticBackdrop" th:id="Modal" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg  modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title " style="font-size:15px;" id="staticBackdropLabel">부서변경</h5>
+          <button type="button" class="btn-close DeptModal_close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body" style="height: auto;">
+          <p  style="margin-bottom: 0;" class="alert alert-light text-center fw-bold">부서를 선택하여 주세요.</p>
+          <div class="text-center ">
+            <div id="sub_dept_div" class="input-group has-validation">
+              <select id="dept_list" class="form-select" th:if="${dept_list}" onchange="get_work();">
+                <option value="-1" disabled selected>등록 부서를 선택해주세요.  </option>
+                <option th:each="list : ${dept_list}" th:text="${list.NAME}" th:value="${list.CODE}"></option>
+                </option>
+              </select>
+
+              <select  class="form-select" th:unless="${dept_list}" disabled >
+              </select>
+<!--              <button th:if="${dept_list}"  id="modDeptBtn" class="btn btn-primary ms-2 position-relative"  type="button">확인</button>-->
+<!--              <button th:unless="${dept_list}" disabled   class="btn btn-primary ms-2 position-relative"  type="button">확인</button>-->
+            </div>
+          </div>
+
+          <p  style="margin-bottom: 0;" class="alert alert-light text-center fw-bold">공종명을 선택하여 주세요.</p>
+          <div class="text-center ">
+            <div id="sub_dept_div2" class="input-group has-validation">
+              <select id="work_name2"  class="form-select" style="width:100%" onchange="get_work_code();">
+                <option th:each="list : ${work_list}" th:text="${list.NAME}" th:value="${list.CODE}"></option>
+              </select>
+
+<!--              <select  class="form-select" th:unless="${work_list}" disabled >-->
+<!--              </select>-->
+              <button th:if="${dept_list}"  id="modDeptBtn2" class="btn btn-primary ms-2 position-relative"  type="button">확인</button>
+              <button th:unless="${dept_list}" disabled   class="btn btn-primary ms-2 position-relative"  type="button">확인</button>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal  fade" id="staticBackdrop2" th:id="Modal_re" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+
+    <div class="modal-dialog modal-lg  modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title " style="font-size:15px;" id="staticBackdropLabel2">지역구분 변경</h5>
+          <button type="button" class="btn-close DeptModal_close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body" style="height: auto;">
+          <p  style="margin-bottom: 0;" class="alert alert-light text-center fw-bold">지역구분을 선택하여 주세요.</p>
+          <div class="text-center ">
+            <div id="sub_dept_div3" class="input-group has-validation">
+              <select id="area_list" class="form-select" th:if="${area_list}" >
+                <option th:each="list : ${area_list}" th:text="${list.NAME}" th:value="${list.CODE}"></option>
+                </option>
+              </select>
+
+              <select  class="form-select" th:unless="${area_list}" disabled >
+              </select>
+                <button th:if="${area_list}"  id="modDeptBtn_re" class="btn btn-primary ms-2 position-relative"  type="button">확인</button>
+                <button th:unless="${area_list}" disabled   class="btn btn-primary ms-2 position-relative"  type="button">확인</button>
+            </div>
+          </div>
+
+
+
+        </div>
+
+        <div class="modal-footer">
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal  fade" id="staticBackdrop3" th:id="Modal_cn" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+
+    <div class="modal-dialog modal-lg  modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title " style="font-size:15px;" id="staticBackdropLabel3">원도급사 변경</h5>
+          <button type="button" class="btn-close DeptModal_close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body" style="height: auto;">
+          <p  style="margin-bottom: 0;" class="alert alert-light text-center fw-bold">원도급사를 선택하여 주세요.</p>
+          <div class="text-center ">
+            <div id="sub_dept_div4" class="input-group has-validation">
+               <select id="cont_name" class="form-control" th:value="${info.contractor_name}" onchange="get_cont_user_name2();">
+                 <option th:each="list : ${contractor_list}" th:text="${list.NAME}" th:value="${list.CODE}"></option>
+               </select>
+
+              <button th:if="${contractor_list}"  id="modDeptBtn_cn" class="btn btn-primary ms-2 position-relative"  type="button">확인</button>
+              <button th:unless="${contractor_list}" disabled   class="btn btn-primary ms-2 position-relative"  type="button">확인</button>
+            </div>
+          </div>
+
+
+
+        </div>
+
+        <div class="modal-footer">
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</html>

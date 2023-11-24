@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:replace="fragments/head :: headFragment"></head>
+<link th:href="@{/css/main.css}" rel="stylesheet">
+<link th:href="@{/css/side.css}" rel="stylesheet">
+
+
+<script th:inline="javaScript" th:src="@{js/auth.js}"></script>
+<script th:inline="javaScript" th:src="@{js/index.js}"></script>
+<style>
+
+</style>
+<h3>수주영업정보</h3>
+<body>
+<div style="float:right;">
+    <button class="btn btn-success btn-sm mb-2" onclick="search();">조회</button>
+    <button class="btn btn-info btn-sm mb-2" onclick="add();">추가</button>
+    <button class="btn btn-danger btn-sm mb-2 delBtn" onclick="del_list();">삭제</button>
+    <button class="btn btn-primary btn-sm mb-2">저장</button>
+</div>
+<div class="col-sm-12">
+    <label for="yyyy_t" class="form-label">ㆍ조회년도</label>
+    <input id="yyyy_f" type="text" style="text-align:center;width:70px;" /> ~ <input type="text" id="yyyy_t" style="text-align:center;width:70px;">
+
+    <label for="dept_code" class="form-label">ㆍ부서</label>
+    &nbsp;
+    <select id="dept_code" style="width:150px;">
+        <option value="">전체</option>
+        <option th:each="list : ${dept_list}" th:text="${list.NAME}" th:value="${list.CODE}"></option>
+    </select>
+
+    <label for="area_code" class="form-label">ㆍ지역</label>
+    &nbsp;
+    <select id="area_code" style="width:150px;">
+        <option value="">전체</option>
+        <option th:each="list : ${area_list}" th:text="${list.NAME}" th:value="${list.CODE}"></option>
+    </select>
+
+    <label for="act_state" class="form-label">ㆍ상태</label>
+    &nbsp;
+    <select id="act_state" style="width:150px;">
+        <option value="">전체</option>
+        <option th:each="list : ${act_state_list}" th:text="${list.NAME}" th:value="${list.CODE}"></option>
+    </select>
+
+
+
+
+
+</div>
+<div>
+    <h4>ㆍ수주활동 기본정보</h4>
+    <div style="padding : 0px 0px 0px 30px;">수주회의 용으로 활용됩니다.[ ☞ 실적: 수주년월이 회의 개최 전월까지로 된 건중 낙찰로 분류된 건 &nbsp; ☞ 예상:수주년월이 회의개최월로 표시된 건 &nbsp; ☞ 협의대상: 예상 중 협의대상으로 분류 되어 있는 건 ]</div>
+
+</div>
+<div class="col-12">
+
+    <table id="table" class="table text-nowrap table-striped"></table>
+    <div id="jqGridPager"></div>
+</div>
+<div class="col-12">
+    <h4>ㆍ수주활동내역</h4>
+    <div class="col-6">
+        <table id="detail_table" class="table text-nowrap table-striped"></table>
+    </div>
+    <div id="jqGridPager_sub"></div>
+
+
+</div>
+
+<script th:inline="javaScript">
+
+
+        /*<![CDATA[*/
+        let data = /*[[ ${board_list} ]]*/;
+        let jsData = /*[[ ${list} ]]*/;
+        let data2 = /*[[ ${search_list} ]]*/;
+        /*]]*/
+
+
+
+
+
+</script>
+
+<script th:inline="javaScript">
+
+$(function() {
+
+    var now = new Date();
+    var year = now.getFullYear();
+    document.getElementById("yyyy_t").value = year;
+    document.getElementById("yyyy_f").value = 2010;
+
+})
+
+</script>
+
+
+
+
+</body>
+
+</html>
