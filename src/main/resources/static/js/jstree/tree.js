@@ -3,7 +3,7 @@
  * Author : vsvvssrao (https://github.com/vsvvssrao)
  * Demo link : https://vsvvssrao.github.io/TreeView/
  * Date: Sat Oct 26 2019
- */
+ *///
 (function ($) {
   $.fn.tree = function (options) {
     var settings = $.extend({
