@@ -683,7 +683,7 @@ $(function(){
 
             //$("#act_cont").css("top", Math.max(-176, ($(window).width()/2)-300)+"px");
            //console.log(height);
-           //$('.ui-jqgrid-bdiv').height(height);
+           //$('.ui-jqgrid-bdiv').height(height);l
            //$("#detail_table").setGridHeight($(this).height() * .345);
 
            //jQuery("#table").jqGrid('destroyGroupHeader');
